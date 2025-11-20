@@ -1,0 +1,125 @@
+@import 'animate.css';
+
+/* Global Transitions */
+* {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Container Styles */
+.container {
+  background-color: var(--bg-light);
+  min-height: 100vh;
+  border-radius: 15px;
+  padding: 2rem;
+}
+
+.dark-container {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: var(--card-light);
+  overflow: hidden;
+}
+
+.dark-container .card {
+  background: var(--card-dark);
+  color: var(--text-dark);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Glassmorphism for Stats Cards */
+.stat-card {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.income-card {
+  border-bottom: 4px solid #198754;
+}
+
+.expense-card {
+  border-bottom: 4px solid #dc3545;
+}
+
+.savings-card {
+  border-bottom: 4px solid #0d6efd;
+}
+
+/* Chart Cards */
+.chart-card {
+  min-height: 400px;
+}
+
+/* Upload Button */
+.btn-upload {
+  background: var(--primary-gradient);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-upload:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+}
+
+/* Dark Mode Toggle */
+.btn-outline-secondary {
+  border-radius: 50px;
+  padding: 0.5rem 1.5rem;
+}
+
+.dark-container .btn-outline-secondary {
+  border-color: #bbb;
+  color: #fff;
+}
+
+.dark-container .btn-outline-secondary:hover {
+  background-color: #333;
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.stat-card h2 {
+  margin-top: 10px;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+h2,
+h5 {
+  margin-bottom: 0.5rem;
+}

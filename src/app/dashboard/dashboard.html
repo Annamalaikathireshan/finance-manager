@@ -1,0 +1,70 @@
+<div class="container py-4" [class.dark-container]="isDarkMode()">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold animate__animated animate__fadeInDown">
+      💰 Finance Dashboard
+    </h2>
+    <div class="d-flex gap-3 align-items-center">
+      <label class="btn btn-upload shadow-sm">
+        <i class="bi bi-upload me-2"></i>
+        <span>Upload Statement</span>
+        <input type="file" (change)="onFileSelected($event)" accept=".csv, .xlsx, .xls, .pdf" style="display: none;">
+      </label>
+      <button class="btn btn-outline-secondary" (click)="toggleTheme()">
+        <i class="bi" [ngClass]="isDarkMode() ? 'bi-sun' : 'bi-moon'"></i>
+        {{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card p-4 text-center animate__animated animate__fadeInUp stat-card income-card">
+        <h5>Total Income</h5>
+        <h2 class="text-success fw-bold">
+          ₹<span [countUp]="totalIncome()"></span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-4 text-center animate__animated animate__fadeInUp animate__delay-1s stat-card expense-card">
+        <h5>Total Expenses</h5>
+        <h2 class="text-danger fw-bold">
+          ₹<span [countUp]="totalExpenses()"></span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-4 text-center animate__animated animate__fadeInUp animate__delay-2s stat-card savings-card">
+        <h5>Total Savings</h5>
+        <h2 class="text-primary fw-bold">
+          ₹<span [countUp]="totalSavings()"></span>
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-4 mb-4">
+      <div class="card p-3 shadow-sm animate__animated animate__zoomIn chart-card">
+        <h5 class="text-center mb-3">Expense Breakdown</h5>
+        <canvas baseChart [data]="doughnutChartData()" chartType="doughnut"></canvas>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="card p-3 shadow-sm animate__animated animate__zoomIn animate__delay-1s chart-card">
+        <h5 class="text-center mb-3">Monthly Expenses</h5>
+        <canvas baseChart [data]="barChartData()" [options]="barChartOptions" chartType="bar"></canvas>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="card p-3 shadow-sm animate__animated animate__zoomIn animate__delay-2s chart-card">
+        <h5 class="text-center mb-3">Financial Health</h5>
+        <canvas baseChart [data]="polarAreaChartData()" chartType="polarArea"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

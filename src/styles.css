@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles */
+:root {
+    --bg-light: #f8f9fa;
+    --bg-dark: #121212;
+    --card-light: #ffffff;
+    --card-dark: #1e1e1e;
+    --text-light: #212529;
+    --text-dark: #e0e0e0;
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+}
+
+body.dark-mode {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+/* Ensure Bootstrap icons are visible */
+.bi {
+    display: inline-block;
+    vertical-align: middle;
+}
