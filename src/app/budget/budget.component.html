@@ -1,0 +1,140 @@
+<div class="budget-container">
+    <div class="container mt-4">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="text-center mb-0">Personal Finance Manager</h1>
+            <div>
+                <button *ngIf="!authService.currentUser()" class="btn btn-primary" (click)="authService.login()">
+                    <i class="bi bi-google me-2"></i>Login with Google
+                </button>
+                <div *ngIf="authService.currentUser()" class="d-flex align-items-center gap-3">
+                    <span>Welcome, {{ authService.currentUser()?.displayName }}</span>
+                    <button class="btn btn-outline-danger" (click)="authService.logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Warning -->
+        <div *ngIf="!authService.currentUser()" class="alert alert-warning text-center" role="alert">
+            Please login with Google to view and manage your budget data.
+        </div>
+
+        <!-- Main Content (Protected) -->
+        <div *ngIf="authService.currentUser()">
+            <div class="d-flex justify-content-end mb-3">
+                <label class="btn btn-upload">
+                    <i class="bi bi-upload me-2"></i>
+                    Upload CSV
+                    <input type="file" (change)="onFileSelected($event)" accept=".csv" style="display: none;">
+                </label>
+            </div>
+
+            <div class="budget-layout">
+                <!-- Left Section: Income, Expenses, Summary -->
+                <div class="budget-tables">
+
+                    <!-- Money In Section -->
+                    <div class="budget-section">
+                        <div class="section-header income-header">
+                            <h3>Money In</h3>
+                        </div>
+                        <table class="budget-table">
+                            <tbody>
+                                <tr *ngFor="let item of incomeItems(); let i = index">
+                                    <td class="description-col">{{ item.description }}</td>
+                                    <td class="amount-col">₹{{ formatCurrency(item.amount) }}</td>
+                                    <td class="action-col">
+                                        <button class="btn-delete" (click)="removeIncome(i)" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td class="description-col"><strong>Total income</strong></td>
+                                    <td class="amount-col"><strong>₹{{ formatCurrency(totalIncome()) }}</strong></td>
+                                    <td class="action-col"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Add Income Form -->
+                        <div class="add-item-form">
+                            <input type="text" [ngModel]="newIncome().description"
+                                (ngModelChange)="updateNewIncomeDescription($event)" placeholder="Description"
+                                class="form-input">
+                            <input type="number" [ngModel]="newIncome().amount"
+                                (ngModelChange)="updateNewIncomeAmount($event)" placeholder="Amount"
+                                class="form-input amount-input" min="0" step="0.01">
+                            <button class="btn-add" (click)="addIncome()">
+                                <i class="bi bi-plus-circle"></i> Add
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Money Out Section -->
+                    <div class="budget-section">
+                        <div class="section-header expense-header">
+                            <h3>Money Out</h3>
+                        </div>
+                        <table class="budget-table">
+                            <tbody>
+                                <tr *ngFor="let item of expenseItems(); let i = index">
+                                    <td class="description-col">{{ item.description }}</td>
+                                    <td class="amount-col">₹{{ formatCurrency(item.amount) }}</td>
+                                    <td class="action-col">
+                                        <button class="btn-delete" (click)="removeExpense(i)" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td class="description-col"><strong>Total expenses</strong></td>
+                                    <td class="amount-col"><strong>₹{{ formatCurrency(totalExpenses()) }}</strong></td>
+                                    <td class="action-col"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Add Expense Form -->
+                        <div class="add-item-form">
+                            <input type="text" [ngModel]="newExpense().description"
+                                (ngModelChange)="updateNewExpenseDescription($event)" placeholder="Category/Description"
+                                class="form-input">
+                            <input type="number" [ngModel]="newExpense().amount"
+                                (ngModelChange)="updateNewExpenseAmount($event)" placeholder="Amount"
+                                class="form-input amount-input" min="0" step="0.01">
+                            <button class="btn-add" (click)="addExpense()">
+                                <i class="bi bi-plus-circle"></i> Add
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Money Left Over Section -->
+                    <div class="budget-section">
+                        <div class="section-header savings-header">
+                            <h3>Money Left Over</h3>
+                        </div>
+                        <table class="budget-table">
+                            <tbody>
+                                <tr class="total-row">
+                                    <td class="description-col"><strong>Income minus expenses</strong></td>
+                                    <td class="amount-col"><strong>₹{{ formatCurrency(moneyLeftOver()) }}</strong></td>
+                                    <td class="action-col"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Right Section: Donut Chart -->
+                <div class="chart-section">
+                    <h3 class="chart-title">Money Out</h3>
+                    <div class="chart-container">
+                        <canvas baseChart [data]="pieChartData()" [options]="pieChartOptions" chartType="doughnut">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
