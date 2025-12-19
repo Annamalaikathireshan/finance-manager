@@ -4,7 +4,8 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 require('./models/User');
 require('./models/Transaction');
@@ -12,12 +13,16 @@ require('./services/passport');
 
 const keys = require('./config/keys');
 
-mongoose.connect(keys.mongoURI)
-    .then(() => console.log('Successfully connected to MongoDB.'))
-    .catch(err => {
-        console.error('CRITICAL: MongoDB connection error:', err.message);
-        console.error('Please ensure your IP is whitelisted in MongoDB Atlas.');
-    });
+if (!keys.mongoURI) {
+    console.error('CRITICAL: MONGO_URI is not defined in environment variables.');
+} else {
+    mongoose.connect(keys.mongoURI)
+        .then(() => console.log('Successfully connected to MongoDB.'))
+        .catch(err => {
+            console.error('CRITICAL: MongoDB connection error:', err.message);
+            console.error('Please ensure your IP is whitelisted in MongoDB Atlas.');
+        });
+}
 
 const app = express();
 
