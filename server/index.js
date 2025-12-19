@@ -12,7 +12,12 @@ require('./services/passport');
 
 const keys = require('./config/keys');
 
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI)
+    .then(() => console.log('Successfully connected to MongoDB.'))
+    .catch(err => {
+        console.error('CRITICAL: MongoDB connection error:', err.message);
+        console.error('Please ensure your IP is whitelisted in MongoDB Atlas.');
+    });
 
 const app = express();
 
@@ -24,26 +29,44 @@ app.use(
         keys: [keys.cookieKey]
     })
 );
+
+// Fix for Passport 0.6.0+ incompatibility with cookie-session
+app.use((req, res, next) => {
+    if (req.session && !req.session.regenerate) {
+        req.session.regenerate = (cb) => {
+            cb();
+        };
+    }
+    if (req.session && !req.session.save) {
+        req.session.save = (cb) => {
+            cb();
+        };
+    }
+    next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
 
 require('./routes/authRoutes')(app);
 require('./routes/budgetRoutes')(app);
 
-if (process.env.NODE_ENV === 'production') {
-    // Express will serve up production assets
-    // like our main.js file, or main.css file!
+// In Vercel, static files are handled by the vercel.json routes
+// So we don't need the static serving logic here usually,
+// but we'll keep it as a fallback if needed.
+if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
     app.use(express.static('client/dist/finance-manager'));
-
-    // Express will serve up the index.html file
-    // if it doesn't recognize the route
     const path = require('path');
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'dist', 'finance-manager', 'index.html'));
     });
 }
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    const PORT = process.env.PORT || 5001;
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running on port ${PORT}`);
+        console.log(`Local: http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;

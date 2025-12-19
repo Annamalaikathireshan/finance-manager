@@ -1,12 +1,12 @@
 {
     "/auth/*": {
-        "target": "http://localhost:5000",
+        "target": "http://localhost:5001",
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true
     },
     "/api/*": {
-        "target": "http://localhost:5000",
+        "target": "http://localhost:5001",
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true

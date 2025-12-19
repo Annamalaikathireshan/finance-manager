@@ -297,4 +297,8 @@ export class BudgetComponent implements OnInit {
     formatCurrency(amount: number): string {
         return amount.toFixed(2);
     }
+
+    logout() {
+        this.authService.logout();
+    }
 }

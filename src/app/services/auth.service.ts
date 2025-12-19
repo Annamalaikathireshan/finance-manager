@@ -39,9 +39,6 @@ export class AuthService {
     }
 
     logout() {
-        this.http.get('/api/logout').subscribe(() => {
-            this.currentUser.set(null);
-            window.location.href = '/';
-        });
+        window.location.href = '/api/logout';
     }
 }
